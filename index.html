@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>eSports Highlights Telegram Mini App</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- Header Section -->
+    <div class="header">
+      <div class="header-overlay"></div>
+      <img src="https://via.placeholder.com/900x300?text=eSports+Banner" alt="eSports Banner" class="header-image">
+      <div class="header-content">
+        <h1>eSports Highlights</h1>
+      </div>
+      <div class="header-badge">LIVE</div>
+    </div>
+
+    <!-- Live Streams Section -->
+    <h2>Live Channels</h2>
+    <div id="live-streams" class="video-list">
+      <!-- Live streams will be populated dynamically -->
+    </div>
+
+    <!-- History Section -->
+    <h2>History</h2>
+    <div id="video-list" class="video-list">
+      <!-- History videos will be populated dynamically -->
+    </div>
+  </div>
+  <script src="video.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
