@@ -4,15 +4,15 @@ let videos = {
     embedCode: '<iframe src="https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fweb.facebook.com%2Fdnaindia%2Fvideos%2F1000703981665667%2F&show_text=false&width=560&t=0" width="560" height="314" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowFullScreen="true"></iframe>',
     title: 'SBO Live',
     streamer: 'မိုး',
-    thumbnail: 'https://via.placeholder.com/120x80?text=Live+Stream+1',
+    thumbnail: 'https://pbs.twimg.com/media/Fzo-ABjaAAEzlmD?format=jpg&name=medium',
     viewers: 'Live Now',
     isLive: true,
   },
-  live2: {
+   live2: {
     embedCode: '<iframe src="https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fweb.facebook.com%2Fdnaindia%2Fvideos%2F1000703981665667%2F&show_text=false&width=560&t=0" width="560" height="314" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowFullScreen="true"></iframe>',
     title: 'SBO Live',
     streamer: 'ကတုံး',
-    thumbnail: 'https://via.placeholder.com/120x80?text=Live+Stream+1',
+    thumbnail: 'https://pbs.twimg.com/media/Fzo-ABjaAAEzlmD?format=jpg&name=medium',
     viewers: 'Live Now',
     isLive: true,
   },
