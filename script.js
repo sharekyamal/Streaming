@@ -8,7 +8,7 @@ let videos = {
     viewers: 'Live Now',
     isLive: true,
   },
-   live2: {
+  live2: {
     embedCode: '<iframe src="https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fweb.facebook.com%2Fdnaindia%2Fvideos%2F1000703981665667%2F&show_text=false&width=560&t=0" width="560" height="314" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowFullScreen="true"></iframe>',
     title: 'SBO Live',
     streamer: 'ကတုံး',
@@ -30,7 +30,7 @@ let videos = {
 const TELEGRAM_BOT_TOKEN = '7937844611:AAFtYXHDQwIy36RlDW6txBCk857ELD5iTqI';
 const TELEGRAM_CHAT_IDS = [
   '-1002277431924', // Group Chat ID
-  '@sbolivechannel',    // Channel Username (Public Channel ဆိုရင်)
+  '@sbolivechannel', // Channel Username (Public Channel ဆိုရင်)
 ];
 
 // Make videos globally available
@@ -54,10 +54,15 @@ try {
 async function sendNotification(message) {
   for (const chatId of TELEGRAM_CHAT_IDS) {
     try {
-      await fetch(
+      const response = await fetch(
         `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`
       );
-      console.log(`Notification sent to ${chatId}`);
+      const data = await response.json();
+      if (data.ok) {
+        console.log(`Notification sent to ${chatId}`);
+      } else {
+        console.error(`Failed to send notification to ${chatId}:`, data.description);
+      }
     } catch (error) {
       console.error(`Error sending notification to ${chatId}:`, error);
     }
@@ -71,19 +76,20 @@ function addNewLiveVideo(videoId, videoData) {
 
   // Refresh the UI
   const liveStreamsContainer = document.getElementById('live-streams');
-  const videoItem = document.createElement('div');
-  videoItem.className = 'video-item';
-  videoItem.onclick = () => openVideoPage(videoId);
-  videoItem.innerHTML = `
-    <img src="${videoData.thumbnail}" alt="${videoData.title}">
-    <div class="badge">LIVE</div>
-    <div class="video-info">
-      <p>${videoData.title}</p>
-      <p class="streamer">${videoData.streamer}</p>
-      <p class="viewers">👀 <i class="fas fa-circle live-icon"></i> <span class="live-badge">LIVE</span></p>
-    </div>
-  `;
-  liveStreamsContainer.appendChild(videoItem);
+  if (liveStreamsContainer) {
+    const videoItem = document.createElement('div');
+    videoItem.className = 'video-item';
+    videoItem.onclick = () => openVideoPage(videoId);
+    videoItem.innerHTML = `
+      <img src="${videoData.thumbnail}" alt="${videoData.title}">
+      <div class="video-info">
+        <p>${videoData.title}</p>
+        <p class="streamer">${videoData.streamer}</p>
+        <p class="viewers">👀 <i class="fas fa-circle live-icon"></i> <span class="live-badge">LIVE</span></p>
+      </div>
+    `;
+    liveStreamsContainer.appendChild(videoItem);
+  }
 
   // Send notification
   const message = `New Live Stream Alert! 🎥\nTitle: ${videoData.title}\nStreamer: ${videoData.streamer}\nWatch now!`;
@@ -108,6 +114,10 @@ if (window.location.pathname.includes('index.html') || !window.location.pathname
       return;
     }
 
+    // Clear existing content
+    liveStreamsContainer.innerHTML = '';
+    videoListContainer.innerHTML = '';
+
     // Populate Live Streams and History
     Object.keys(videos).forEach(videoId => {
       const video = videos[videoId];
@@ -118,7 +128,6 @@ if (window.location.pathname.includes('index.html') || !window.location.pathname
       if (video.isLive) {
         videoItem.innerHTML = `
           <img src="${video.thumbnail}" alt="${video.title}">
-          <div class="badge">LIVE</div>
           <div class="video-info">
             <p>${video.title}</p>
             <p class="streamer">${video.streamer}</p>
@@ -140,16 +149,15 @@ if (window.location.pathname.includes('index.html') || !window.location.pathname
     });
 
     // Example: Add a new live video (for testing)
-    // You can call this function whenever a new live video is added
-    const newLiveVideo = {
-      embedCode: '<iframe src="https://www.facebook.com/plugins/video.php?href=YOUR_NEW_LIVE_VIDEO_URL" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true"></iframe>',
-      title: 'New SBO Live',
-      streamer: 'မိုး',
-      thumbnail: 'https://via.placeholder.com/120x80?text=New+Live+Stream',
-      viewers: 'Live Now',
-      isLive: true,
-    };
     // Uncomment the line below to test adding a new live video
-    // addNewLiveVideo('live2', newLiveVideo);
+    // const newLiveVideo = {
+    //   embedCode: '<iframe src="https://www.facebook.com/plugins/video.php?href=YOUR_NEW_LIVE_VIDEO_URL" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true"></iframe>',
+    //   title: 'New SBO Live',
+    //   streamer: 'မိုး',
+    //   thumbnail: 'https://via.placeholder.com/120x80?text=New+Live+Stream',
+    //   viewers: 'Live Now',
+    //   isLive: true,
+    // };
+    // addNewLiveVideo('live3', newLiveVideo);
   });
 }
