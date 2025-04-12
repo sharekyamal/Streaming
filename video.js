@@ -1,52 +1,14 @@
 // Replace with your Telegram Bot Token and Group Chat ID
-const TELEGRAM_BOT_TOKEN = 'YOUR_BOT_TOKEN';
-const TELEGRAM_GROUP_CHAT_ID = 'YOUR_GROUP_CHAT_ID';
-
-// Sample video data (used in both index.html and video.html)
-const videos = {
-  live1: {
-    embedCode: '<iframe src="https://www.facebook.com/plugins/video.php?href=YOUR_LIVE_VIDEO_URL" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true"></iframe>',
-    title: 'Game Pro Ti...',
-    streamer: 'RISHAB',
-    thumbnail: 'https://via.placeholder.com/120x80?text=Live+Stream+1',
-    viewers: 'Live Now',
-    isLive: true,
-  },
-  history1: {
-    embedCode: '<iframe src="https://www.facebook.com/plugins/video.php?href=YOUR_HISTORY_VIDEO_URL" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true"></iframe>',
-    title: 'Game Tour...',
-    streamer: 'RAVI',
-    thumbnail: 'https://via.placeholder.com/120x80?text=History+Video+1',
-    viewers: '23.5K Views',
-    isLive: false,
-  },
-  // Add more videos as needed
-};
-
-// Make videos globally available for script.js
-window.videos = videos;
-
-// Initialize Telegram Web App (for video.html)
-let TelegramWebApp = null;
-try {
-  TelegramWebApp = window.Telegram.WebApp;
-  if (TelegramWebApp) {
-    TelegramWebApp.ready();
-    TelegramWebApp.expand();
-  } else {
-    console.error('Telegram Web App is not available. Please open this app in Telegram.');
-  }
-} catch (error) {
-  console.error('Error initializing Telegram Web App:', error);
-}
+const TELEGRAM_BOT_TOKEN = '7937844611:AAFtYXHDQwIy36RlDW6txBCk857ELD5iTqI';
+const TELEGRAM_GROUP_CHAT_ID = '-1002277431924'; // Replace with your Group Chat ID
 
 // Load video and comments on page load (for video.html)
 document.addEventListener('DOMContentLoaded', () => {
   if (window.location.pathname.includes('video.html')) {
     const videoId = localStorage.getItem('currentVideoId');
-    if (videoId && videos[videoId]) {
+    if (videoId && window.videos[videoId]) {
       const player = document.getElementById('player');
-      player.innerHTML = videos[videoId].embedCode;
+      player.innerHTML = window.videos[videoId].embedCode;
     } else {
       const player = document.getElementById('player');
       player.innerHTML = '<p>Video not found.</p>';
@@ -58,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Load comments from Telegram group
 async function loadComments() {
   const commentsList = document.getElementById('comments-list');
-  if (!TelegramWebApp) {
+  if (!Telegram.WebApp) {
     commentsList.innerHTML = '<p>Comments are only available in Telegram.</p>';
     return;
   }
@@ -103,7 +65,7 @@ async function loadComments() {
 
 // Post a comment to Telegram group
 async function postComment() {
-  if (!TelegramWebApp) {
+  if (!Telegram.WebApp) {
     console.error('Comment posting is only available in Telegram.');
     return;
   }
@@ -113,7 +75,7 @@ async function postComment() {
   if (!text) return;
 
   try {
-    const user = TelegramWebApp.initDataUnsafe.user || { username: 'Anonymous', first_name: 'User' };
+    const user = Telegram.WebApp.initDataUnsafe.user || { username: 'Anonymous', first_name: 'User' };
     const username = user.username || user.first_name || 'Anonymous';
     const message = `[${username}] ${text}`;
 
