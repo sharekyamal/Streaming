@@ -1,18 +1,27 @@
-// Replace with your Telegram Bot Token and Group Chat ID
+// Telegram Bot Token and Group Chat ID
 const TELEGRAM_BOT_TOKEN = '7937844611:AAFtYXHDQwIy36RlDW6txBCk857ELD5iTqI';
-const TELEGRAM_GROUP_CHAT_ID = '-1002277431924'; // Replace with your Group Chat ID
+const TELEGRAM_GROUP_CHAT_ID = '-1002277431924';
 
 // Load video and comments on page load (for video.html)
 document.addEventListener('DOMContentLoaded', () => {
   if (window.location.pathname.includes('video.html')) {
-    const videoId = localStorage.getItem('currentVideoId');
-    if (videoId && window.videos[videoId]) {
+    // Ensure videos object is available
+    if (!window.videos) {
+      console.error('Videos data not found. Ensure script.js is loaded properly.');
       const player = document.getElementById('player');
+      player.innerHTML = '<p>Error: Video data not found.</p>';
+      return;
+    }
+
+    const videoId = localStorage.getItem('currentVideoId');
+    const player = document.getElementById('player');
+    
+    if (videoId && window.videos[videoId]) {
       player.innerHTML = window.videos[videoId].embedCode;
     } else {
-      const player = document.getElementById('player');
       player.innerHTML = '<p>Video not found.</p>';
     }
+
     loadComments();
   }
 });
@@ -20,10 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
 // Load comments from Telegram group
 async function loadComments() {
   const commentsList = document.getElementById('comments-list');
-  if (!Telegram.WebApp) {
+  if (!window.Telegram || !window.Telegram.WebApp) {
     commentsList.innerHTML = '<p>Comments are only available in Telegram.</p>';
     return;
   }
+
   commentsList.innerHTML = '<p>Loading comments...</p>';
 
   try {
@@ -59,33 +69,45 @@ async function loadComments() {
     });
   } catch (error) {
     commentsList.innerHTML = '<p>Error loading comments.</p>';
-    console.error('Error:', error);
+    console.error('Error loading comments:', error);
   }
 }
 
 // Post a comment to Telegram group
 async function postComment() {
-  if (!Telegram.WebApp) {
+  if (!window.Telegram || !window.Telegram.WebApp) {
     console.error('Comment posting is only available in Telegram.');
+    alert('Please open this app in Telegram to post comments.');
     return;
   }
+
   const commentInput = document.getElementById('comment-input');
   const text = commentInput.value.trim();
 
-  if (!text) return;
+  if (!text) {
+    alert('Please enter a comment.');
+    return;
+  }
 
   try {
-    const user = Telegram.WebApp.initDataUnsafe.user || { username: 'Anonymous', first_name: 'User' };
+    const user = window.Telegram.WebApp.initDataUnsafe.user || { username: 'Anonymous', first_name: 'User' };
     const username = user.username || user.first_name || 'Anonymous';
     const message = `[${username}] ${text}`;
 
-    await fetch(
+    const response = await fetch(
       `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage?chat_id=${TELEGRAM_GROUP_CHAT_ID}&text=${encodeURIComponent(message)}`
     );
+    const data = await response.json();
 
-    commentInput.value = '';
-    loadComments();
+    if (data.ok) {
+      commentInput.value = '';
+      loadComments();
+    } else {
+      console.error('Error posting comment:', data.description);
+      alert(`Failed to post comment: ${data.description}`);
+    }
   } catch (error) {
     console.error('Error posting comment:', error);
+    alert('Error posting comment. Please try again.');
   }
 }
