@@ -1,5 +1,5 @@
 // Sample video data (used in both index.html and video.html)
-let videos = {
+const videos = {
   live1: {
     embedCode: '<iframe src="https://www.facebook.com/plugins/video.php?height=314&href=https%3A%2F%2Fweb.facebook.com%2Fdnaindia%2Fvideos%2F1000703981665667%2F&show_text=false&width=560&t=0" width="560" height="314" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowFullScreen="true"></iframe>',
     title: 'SBO Live',
@@ -17,7 +17,7 @@ let videos = {
     isLive: true,
   },
   history1: {
-    embedCode: '<iframe src="https://www.facebook.com/plugins/video.php?href=YOUR_HISTORY_VIDEO_URL" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true"></iframe>',
+    embedCode: '<iframe src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fweb.facebook.com%2Fdnaindia%2Fvideos%2F1000703981665667%2F&show_text=false&width=560&t=0" width="560" height="314" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowFullScreen="true"></iframe>',
     title: 'Game Tour...',
     streamer: 'RAVI',
     thumbnail: 'https://via.placeholder.com/120x80?text=History+Video+1',
@@ -147,17 +147,5 @@ if (window.location.pathname.includes('index.html') || !window.location.pathname
         videoListContainer.appendChild(videoItem);
       }
     });
-
-    // Example: Add a new live video (for testing)
-    // Uncomment the line below to test adding a new live video
-    // const newLiveVideo = {
-    //   embedCode: '<iframe src="https://www.facebook.com/plugins/video.php?href=YOUR_NEW_LIVE_VIDEO_URL" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true"></iframe>',
-    //   title: 'New SBO Live',
-    //   streamer: 'မိုး',
-    //   thumbnail: 'https://via.placeholder.com/120x80?text=New+Live+Stream',
-    //   viewers: 'Live Now',
-    //   isLive: true,
-    // };
-    // addNewLiveVideo('live3', newLiveVideo);
   });
 }
